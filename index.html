@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STATE CAPITAL</title>
+    
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body class="fullbg">
+    <div class="c1">
+        <h1>CHECK YOUR KNOWLEDGE</h1>
+        <div class="hrline1"></div>
+        <p class="label">Choose a card to start</p>
+        <div class="hrline1"></div>
+    </div>
+
+    <div class="c2">
+        <div class="card1" onclick="openquiz('india')">
+            <img src="./indiaMap.png" alt="INDIA">
+        </div>
+        <div class="card1" onclick="openquiz('science')">
+            <img src="./colorful-science-objects-icons-vector-set_1308-140707.avif" alt="SCIENCE">
+        </div>
+        <div class="card1" onclick="openquiz('history')">
+            <img src="./history.jpg" alt="HISTORY">
+        </div>
+        <div class="card1" onclick="openquiz('geography')">
+            <img src="./Geography-Books.jpg" alt="GEOGRAPHY">
+        </div>
+        <div class="card1" onclick="openquiz('gk')">
+            <img src="./gk.png" alt="GENERAL KNOWLEDGE">
+        </div>
+        <div class="card1" onclick="openquiz('physics')">
+            <img src="./physics.avif" alt="PHYSICS">
+        </div>
+        <div class="card1" onclick="openquiz('chemistry')">
+            <img src="./5-Steps-to-Understand-Chemistry.webp" alt="CHEMISTRY">
+        </div>
+        <div class="card1" onclick="openquiz('biology')">
+            <img src="./bio.jpg" alt="BIOLOGY">
+        </div>
+    </div>
+
+
+    <script>
+        const openquiz = (quizname) => {
+            localStorage.clear();
+
+            localStorage.setItem('quizType', quizname);
+            localStorage.setItem('questionNumber', 1)
+            localStorage.setItem('score', 0)
+
+            window.location.href="quiz.html"
+        }
+
+    
+    </script>
+</body>
+</html>

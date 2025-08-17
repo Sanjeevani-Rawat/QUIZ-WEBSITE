@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QUIZ</title>
+  <link rel="stylesheet" href="./quiz.css">
+</head>
+
+<body class="fullbg">
+  <div class="c1">
+    <h1 class="heading">QUIZ</h1>
+  </div>
+
+  <div class="c2">
+    <p class="question" id="question"> Question 1. This is a QUESTION? </p>
+    <div class="option" id="option1out" onclick="clickoption('1')">
+      <div class="circle1">
+        <p class="optionIn" id="option1">Option 1</p>
+      </div>
+    </div>
+    <div class="option" id="option2out" onclick="clickoption('2')">
+      <div class="circle1">
+        <p class="optionIn" id="option2">Option 2</p>
+      </div>
+    </div>
+    <div class="option" id="option3out" onclick="clickoption('3')">
+      <div class="circle1">
+        <p class="optionIn" id="option3">Option 3</p>
+      </div>
+    </div>
+    <div class="option" id="option4out" onclick="clickoption('4')">
+      <div class="circle1">
+        <p class="optionIn" id="option4">Option 4</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="c3">
+    <button class="btn" onclick="previousquestion()">Previous</button>
+    <button class="btn" onclick="quitquiz()">Quit</button>
+    <button class="btn" onclick="nextquestion()">Next</button>
+  </div>
+
+  <div class="scoreboard">
+    <p class="scoretext">Score:</p>
+    <p id="score">0/0</p>
+  </div>
+
+
+  <script>
+    // console.log(localStorage.getItem('quizType'));
+    // console.log(localStorage.getItem('questionNumber'));
+    // console.log(localStorage.getItem('score'));
+
+    const indiaquestions = [
+      {
+        question: "Question 1. Which state capital is known as the 'Pink City'?",
+        options: ["Jaipur", "Ranchi", "Dehradun", "Lucknow"],
+        answer: 0,
+      },
+      {
+        question: "Question 2. What is the capital of Maharashtra?",
+        options: ["Mumbai", "New Delhi", "Chennai", "None of the above"],
+        answer: 0,
+      },
+      {
+        question: "Question 3. Dispur is the capital city of which north-eastern state?",
+        options: ["Tripura", "Meghalaya", "Assam", "Mizoram"],
+        answer: 2,
+      },
+      {
+        question: "Question 4. Which city is known as the “summer capital” of Jammu and Kashmir?",
+        options: ["Jammu", "Srinagar", "Shimla", "Anantnag"],
+        answer: 1,
+      },
+      {
+        question: "Question 5. Kavaratti is the capital of which Union Territory?",
+        options: ["Daman and Diu", "Dadar and Nagar Haveli", "Chandigarh", "Lakshadweep"],
+        answer: 3,
+      },
+      {
+        question: "Question 6. Ranchi is the capital of which Indian state?",
+        options: ["Bihar", "Telangana", "Jharkhand", "Madhya Pradesh"],
+        answer: 2,
+      },
+      {
+        question: "Question 7. Silvassa is the capital of which Union Territory?",
+        options: ["Mumbai", "Puducherry", "Daman and Diu", "Dadar and Nagar Haveli"],
+        answer: 3,
+      },
+      {
+        question: "Question 8. What is the capital of the Goa?",
+        options: ["Imphal", "Itanagar", "Hyderabad", "Panaji"],
+        answer: 3,
+      },
+      {
+        question: "Question 9. Gangtok is the capital of which state?",
+        options: ["Sikkim", "Arunachal Pradesh", "Nagaland", "Mizoram"],
+        answer: 0,
+      },
+      {
+        question: "Question 10. Which capital has two state?",
+        options: ["Dispur", "Chandigarh", "	Shillong", "Ranchi"],
+        answer: 1,
+      },
+    ];
+
+    const sciencequestions = [
+      {
+        question: "Question 1. What type of chemical reactions take place when electricity is passed through water?",
+        options: ["Decomposition", "Combination", "Displacement", "Double displacement"],
+        answer: 0,
+      },
+      {
+        question: "Question 2. Which of the following is a biodegradable waste?",
+        options: ["Aluminum can", "DDT", "Plastic bag", "Cow dung"],
+        answer: 3,
+      },
+      {
+        question: "Question 3. What is the nature of nutrition in fungi? ",
+        options: ["Saprotrophs", "Parasite", "Mixed autotrophs", "Autotrophs"],
+        answer: 0,
+      },
+      {
+        question: "Question 4. Which conducting tissue is responsible for multidirectional transport in plants?",
+        options: ["Guard Cell", "Xylem", "Phloem", "Parenchyma"],
+        answer: 2,
+      },
+      {
+        question: "Question 5. Which of the following non-metal is liquid at room temperature?",
+        options: ["Phosphorous", "Bromine", "Mercury", "Carbon"],
+        answer: 2,
+      },
+      {
+        question: "Question 6. What is the main function of the cerebrum?",
+        options: ["Thinking", "Hearing", "Memory", "Balancing"],
+        answer: 0,
+      },
+      {
+        question: "Question 7. The highest coordinating center in the human body is:",
+        options: ["Kidney", "Heart", "Brain", "Spinal cord"],
+        answer: 2,
+      },
+      {
+        question: "Question 8. The longest fiber on the cell body of a neuron is called:",
+        options: ["Axon", "Sheath", "Cytoplasm", "Dendrites"],
+        answer: 0,
+      },
+      {
+        question: "Question 9. The blue appearance of the sky is due to:",
+        options: ["Atmospheric refraction", "Scattering of light", "Presence of plants in water", "None of these"],
+        answer: 1,
+      },
+      {
+        question: "Question 10. The phenomenon of light scattering by colloidal particles is known as:",
+        options: ["Dispersion", "Tyndall effect", "Atmospheric refraction", "Internal reflection"],
+        answer: 1,
+      },
+    ];
+
+    const historyquestions = [
+      {
+        question: "Question 1. Which was the earliest civilization in India?",
+        options: ["Mesopotamian Civilization", "Egyptian Civilization", "The Indus Valley Civilization", "Chinese Civilization"],
+        answer: 2,
+      },
+      {
+        question: "Question 2. Who wrote the famous ancient Indian text, Arthashastra?",
+        options: ["Kalidasa", "Kautilya (Chanakya)", "Banabhatta", "Vishnugupta"],
+        answer: 1,
+      },
+      {
+        question: "Question 3. Where is the Great Bath located?",
+        options: ["Mohenjo-daro, Indus Valley Civilization", "Harappa", "Lothal", "Dholavira"],
+        answer: 0,
+      },
+      {
+        question: "Question 4. Who was the famous king of the Gupta Dynasty known as the ‘Indian Napoleon’?",
+        options: ["Chandragupta I", "Chandragupta II", "Samudragupta", "Skandagupta"],
+        answer: 2,
+      },
+      {
+        question: "Question 5. Who was the famous king who constructed the Red Fort in Delhi?",
+        options: ["Akbar", "Shah Jahan", "Aurangzeb", "Babur"],
+        answer: 1,
+      },
+      {
+        question: "Question 6. Which Rajput ruler is remembered for his bravery in the Battle of Haldighati?",
+        options: ["Rana Sanga", "Prithviraj Chauhan", "Bappa Rawal", "Maharana Pratap"],
+        answer: 3,
+      },
+      {
+        question: "Question 7. Who is known as the ‘Father of the Indian Renaissance’?",
+        options: ["Ishwar Chandra Vidyasagar", "Raja Ram Mohan Roy", "Swami Vivekananda", "Rabindranath Tagore"],
+        answer: 1,
+      },
+      {
+        question: "Question 8. Which freedom fighter is known as the ‘Iron Man of India’?",
+        options: ["Sardar Vallabhbhai Patel", "Bal Gangadhar Tilak", "Subhas Chandra Bose", "Bhagat Singh"],
+        answer: 0,
+      },
+      {
+        question: "Question 9. In which year did World War I begin?",
+        options: ["1914", "1919", "1939", "1945"],
+        answer: 0,
+      },
+      {
+        question: "Question 10. Who discovered the sea route to India?",
+        options: ["Christopher Columbus", "Ferdinand Magellan", "Marco Polo", "Vasco da Gama"],
+        answer: 3,
+      },
+    ];
+
+    const geographyquestions = [
+      {
+        question: "Question 1. Which river is the longest in India?",
+        options: ["Yamuna", "The Ganges", "Godavari", "Brahmaputra"],
+        answer: 1,
+      },
+      {
+        question: "Question 2. What is the name of the largest desert in India?",
+        options: ["The Thar Desert", "Rann of Kutch", "Cold Desert of Ladakh", "Cholistan Desert"],
+        answer: 0,
+      },
+      {
+        question: "Question 3. What is the name of India’s southernmost point?",
+        options: ["Kanyakumari", "Indira Point", "Nicobar Point", "Lakshadweep Point"],
+        answer: 1,
+      },
+      {
+        question: "Question 4. Which is the smallest country in the world by area?",
+        options: ["Monaco", "Maldives", "Vatican City", "San Marino"],
+        answer: 2,
+      },
+      {
+        question: "Question 5. What is the longest river in the world?",
+        options: ["Amazon River", "The Nile River", "Yangtze River", "Mississippi River"],
+        answer: 1,
+      },
+      {
+        question: "Question 6. Which country is known as the Land of the Rising Sun?",
+        options: ["China", "South Korea", "Japan", "Thailand"],
+        answer: 2,
+      },
+      {
+        question: "Question 7. Which layer of Earth’s atmosphere contains the ozone layer?",
+        options: ["Troposphere", "Stratosphere", "Mesosphere", "Thermosphere"],
+        answer: 1,
+      },
+      {
+        question: "Question 8. What is the smallest ocean in the world?",
+        options: ["The Arctic Ocean", "Indian Ocean", "Southern Ocean", "Atlantic Ocean"],
+        answer: 0,
+      },
+      {
+        question: "Question 9. What is the largest island in the world?",
+        options: ["Madagascar", "Greenland", "Borneo", "New Guinea"],
+        answer: 1,
+      },
+      {
+        question: "Question 10. Which country is known as the ‘Land of Thousand Lakes’?",
+        options: ["Sweden", "Norway", "Canada", "Finland"],
+        answer: 3,
+      },
+    ];
+
+    const gkquestions = [
+      {
+        question: "Question 1. Which is the only continent without a desert?",
+        options: ["Europe", "Asia", "Australia", "North America"],
+        answer: 0,
+      },
+      {
+        question: "Question 2. Who discovered America?",
+        options: ["Christopher Columbus", "Vasco da Gama", "Ferdinand Magellan", "Marco Polo"],
+        answer: 0,
+      },
+      {
+        question: "Question 3. Which war ended with the Treaty of Versailles?",
+        options: ["World War I", "World War II", "Cold War", "French Revolution"],
+        answer: 0,
+      },
+      {
+        question: "Question 4. Who was the first woman Prime Minister of India?",
+        options: ["Sarojini Naidu", "Pratibha Patil", "Indira Gandhi", "Sonia Gandhi"],
+        answer: 2,
+      },
+      {
+        question: "Question 5. Who wrote the Indian national anthem?",
+        options: ["Rabindranath Tagore", "Bankim Chandra Chatterjee", "Mahatma Gandhi", "Sarojini Naidu"],
+        answer: 0,
+      },
+      {
+        question: "Question 6. Who wrote ‘Romeo and Juliet’?",
+        options: ["Charles Dickens", "William Shakespeare", "Leo Tolstoy", "Mark Twain"],
+        answer: 1,
+      },
+      {
+        question: "Question 7. Who is the author of the ‘Harry Potter’ series?",
+        options: ["Enid Blyton", "C.S. Lewis", "J.K. Rowling", "George R.R. Martin"],
+        answer: 2,
+      },
+      {
+        question: "Question 8. Who wrote ‘The Jungle Book’?",
+        options: ["Rudyard Kipling", "Ruskin Bond", "Mark Twain", "R.K. Narayan"],
+        answer: 0,
+      },
+      {
+        question: "Question 9. Which vitamin is produced when the skin is exposed to sunlight?",
+        options: ["Vitamin A", "Vitamin D", "Vitamin C", "Vitamin B12"],
+        answer: 1,
+      },
+      {
+        question: "Question 10. Who was the founder of the Mughal Empire in India?",
+        options: ["Akbar", "Aurangzeb", "Babur", "Humayun"],
+        answer: 2,
+      },
+    ];
+
+
+    const physicsquestions = [
+      {
+        question: "Question 1. What is the standard room temperature in Kelvin?",
+        options: ["98 K", "198 K", "100 K", "273 K"],
+        answer: 0,
+      },
+      {
+        question: "Question 2. Which of the following substances is magnetic?",
+        options: ["Nickel", "Aluminum", "Bismuth", "All of these"],
+        answer: 0,
+      },
+      {
+        question: "Question 3.Which metal is generally used for making electromagnets?",
+        options: ["Copper", "Cobalt", "Iron", "None of these"],
+        answer: 2,
+      },
+      {
+        question: "Question 4. X-rays cannot pass through what?",
+        options: ["Skin", "Bone", "Meat", "Wood"],
+        answer: 1,
+      },
+      {
+        question: "Question 5. What is the minimum distance of clear vision?",
+        options: ["25 cm", "50 cm", "100 cm", "Eternal"],
+        answer: 0,
+      },
+      {
+        question: "Question 6. Who introduced the fourth dimension in physics?",
+        options: ["Newton", "Niels Bohr", "Einstein", "None of these"],
+        answer: 2,
+      },
+      {
+        question: "Question 7.  How does pupil come in bright light?",
+        options: ["Big", "Small", "No change", "None of these"],
+        answer: 1,
+      },
+      {
+        question: "Question 8. Which of the following unit is Newton?",
+        options: ["Force", "Displacement", "Distance", "Energy"],
+        answer: 0,
+      },
+      {
+        question: "Question 9. What is the normal temperature of the human body?",
+        options: ["Madagascar", "95 degree", "98.6°F", "99 degrees"],
+        answer: 2,
+      },
+      {
+        question: "Question 10. The small hole in the middle of the iris is called?",
+        options: ["Pupil", "Blood plate", "Retina", "Frontend"],
+        answer: 0,
+      },
+    ];
+
+    const chemistryquestions = [
+      {
+        question: "Question 1. The nucleus of an atom consists of",
+        options: ["Electrons and Neutrons", "Electrons and Protons", "Protons and Neutrons", "All of the above"],
+        answer: 2,
+      },
+      {
+        question: "Question 2. The most abundant rare gas in the atmosphere is",
+        options: ["He", "Ne", "Ar", "Xe"],
+        answer: 2,
+      },
+      {
+        question: "Question 3. The most malleable metal is",
+        options: ["Platinum", "Silver", "Iron", "Gold"],
+        answer: 3,
+      },
+      {
+        question: "Question 4. Who is father of modern chemistry?",
+        options: ["Rutherford", "C.V.Raman", "Lavoisier", "Einstein"],
+        answer: 2,
+      },
+      {
+        question: "Question 5. Which gas also known as stranger gas?",
+        options: ["Nitrous Oxide", "Argon", "Neon", "Xenon"],
+        answer: 0,
+      },
+      {
+        question: "Question 6. Lemon contains",
+        options: ["Citric Acid", "Hydrochloric Acid", "Lactic Acid", "Marlic Acid"],
+        answer: 0,
+      },
+      {
+        question: "Question 7.  Vertical Columns in periodic table is known as",
+        options: ["Periods", "Groups", "Periodic Columns", "Periodic Rows"],
+        answer: 1,
+      },
+      {
+        question: "Question 8. PVC used in plastic industry, its full form is",
+        options: ["Polyvinyl Chloride", "Polyvinyl Carbohydrate", "Polyvanadium Chloride", "None"],
+        answer: 0,
+      },
+      {
+        question: "Question 9.  ________ is not plastic",
+        options: ["HDPE", "PVC", "PET", "DNA"],
+        answer: 3,
+      },
+      {
+        question: "Question 10. _________ is use to measure rain",
+        options: ["Rain Gauge", "Rainmeter", "Rain Scale", "None of the above"],
+        answer: 0,
+      },
+    ];
+
+    const biologyquestions = [
+      {
+        question: "Question 1. What is the process by which plants make their food?",
+        options: ["Respiration", "Photosynthesis", "Transpiration", "Fermentation"],
+        answer: 1,
+      },
+      {
+        question: "Question 2. Which planet is known as the Red Planet?",
+        options: ["Earth", "Venus", "Mars", "Jupiter"],
+        answer: 2,
+      },
+      {
+        question: "Question 3. What is the main organ of the human body responsible for pumping blood?",
+        options: ["Lungs", "Brain", "Liver", "Heart"],
+        answer: 3,
+      },
+      {
+        question: "Question 4. What part of a plant absorbs water and nutrients from the soil?",
+        options: ["Leaves", "Stem", "Roots", "Flowers"],
+        answer: 2,
+      },
+      {
+        question: "Question 5. Which part of the brain controls balance and coordination?",
+        options: ["Cerebrum", "Cerebellum", "Medulla Oblongata", "Hypothalamus"],
+        answer: 1,
+      },
+      {
+        question: "Question 6. What process breaks down rocks into smaller pieces over time due to wind and water action?",
+        options: ["Erosion", "Weathering", "Condensation", "Sedimentation"],
+        answer: 1,
+      },
+      {
+        question: "Question 7. Which animal can sleep for three years at a time?",
+        options: ["Tortoise", "Snail", "Crocodile", "Sloth"],
+        answer: 1,
+      },
+      {
+        question: "Question 8. What do we call the process by which plants lose water vapor?",
+        options: ["Respiration", "Transpiration", "Photosynthesis", "Evaporation"],
+        answer: 1,
+      },
+      {
+        question: "Question 9. Which part of the human body is responsible for producing insulin?",
+        options: ["Liver", "Kidney", "Pancreas", "Stomach"],
+        answer: 2,
+      },
+      {
+        question: "Question 10. How many bones are there in an adult human body?",
+        options: ["206", "201", "208", "210"],
+        answer: 0,
+      },
+    ];
+
+
+
+
+    const quizType = localStorage.getItem('quizType');
+    let questionNumber = localStorage.getItem('questionNumber');
+    let score = localStorage.getItem('score');
+
+    const questionElement = document.getElementById("question")
+    const option1Element = document.getElementById("option1")
+    const option2Element = document.getElementById("option2")
+    const option3Element = document.getElementById("option3")
+    const option4Element = document.getElementById("option4")
+
+
+    const quitquiz = () => {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+
+    const previousquestion = () => {
+      if (quizType == "india") {
+        if (questionNumber > 1) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) - 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          window.alert("Minimum Reached");
+        }
+      }
+      else if (quizType == "science") {
+        if (questionNumber > 1) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) - 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          window.alert("Minimum Reached");
+        }
+      }
+      else if (quizType == "history") {
+        if (questionNumber > 1) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) - 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          window.alert("Minimum Reached");
+        }
+      }
+      else if (quizType == "geography") {
+        if (questionNumber > 1) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) - 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          window.alert("Minimum Reached");
+        }
+      }
+      else if (quizType == "gk") {
+        if (questionNumber > 1) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) - 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          window.alert("Minimum Reached");
+        }
+      }
+      else if (quizType == "physics") {
+        if (questionNumber > 1) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) - 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          window.alert("Minimum Reached");
+        }
+      }
+      else if (quizType == "chemistry") {
+        if (questionNumber > 1) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) - 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          window.alert("Minimum Reached");
+        }
+      }
+      else if (quizType == "biology") {
+        if (questionNumber > 1) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) - 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          window.alert("Minimum Reached");
+        }
+      }
+
+    }
+
+    const nextquestion = () => {
+      if (quizType == "india") {
+        if (questionNumber < indiaquestions.length) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) + 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          setscore();
+          localStorage.setItem("finalscore", `${score}/${indiaquestions.length}`)
+          window.location.href = "score.html";
+        }
+      }
+      else if (quizType == "science") {
+        if (questionNumber < sciencequestions.length) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) + 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          setscore();
+          localStorage.setItem("finalscore", `${score}/${sciencequestions.length}`)
+          window.location.href = "score.html";
+        }
+      }
+      else if (quizType == "history") {
+        if (questionNumber < historyquestions.length) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) + 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          setscore();
+          localStorage.setItem("finalscore", `${score}/${historyquestions.length}`)
+          window.location.href = "score.html";
+        }
+      }
+      else if (quizType == "geography") {
+        if (questionNumber < geographyquestions.length) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) + 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          setscore();
+          localStorage.setItem("finalscore", `${score}/${geographyquestions.length}`)
+          window.location.href = "score.html";
+        }
+      }
+      else if (quizType == "gk") {
+        if (questionNumber < gkquestions.length) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) + 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          setscore();
+          localStorage.setItem("finalscore", `${score}/${gkquestions.length}`)
+          window.location.href = "score.html";
+        }
+      }
+      else if (quizType == "physics") {
+        if (questionNumber < physicsquestions.length) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) + 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          setscore();
+          localStorage.setItem("finalscore", `${score}/${physicsquestions.length}`)
+          window.location.href = "score.html";
+        }
+      }
+      else if (quizType == "chemistry") {
+        if (questionNumber < chemistryquestions.length) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) + 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          setscore();
+          localStorage.setItem("finalscore", `${score}/${chemistryquestions.length}`)
+          window.location.href = "score.html";
+        }
+      }
+      else if (quizType == "biology") {
+        if (questionNumber < biologyquestions.length) {
+          localStorage.setItem("questionNumber", parseInt(questionNumber) + 1);
+          window.location.href = "quiz.html";
+          setquestion();
+        }
+        else {
+          setscore();
+          localStorage.setItem("finalscore", `${score}/${biologyquestions.length}`)
+          window.location.href = "score.html";
+        }
+      }
+
+    }
+
+    const status = () => {
+      console.log('Quiz type is ', quizType)
+      console.log('Question Number type is ', questionNumber)
+      console.log('Score is ', score)
+    }
+
+    const selectedoption = (optionnumber) => {
+      const optionValue = document.getElementById('option' + optionnumber).innerHTML;
+
+      if (quizType == 'india') {
+        if (optionValue == indiaquestions[questionNumber - 1].options[indiaquestions[questionNumber - 1].answer]) {
+          document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+        }
+        else {
+          document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+        }
+      }
+      else if (quizType == 'science') {
+        if (optionValue == sciencequestions[questionNumber - 1].options[sciencequestions[questionNumber - 1].answer]) {
+          document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+        }
+        else {
+          document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+        }
+      }
+      else if (quizType == 'history') {
+        if (optionValue == historyquestions[questionNumber - 1].options[historyquestions[questionNumber - 1].answer]) {
+          document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+        }
+        else {
+          document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+        }
+      }
+      else if (quizType == 'geography') {
+        if (optionValue == geographyquestions[questionNumber - 1].options[geographyquestions[questionNumber - 1].answer]) {
+          document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+        }
+        else {
+          document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+        }
+      }
+      else if (quizType == 'gk') {
+        if (optionValue == gkquestions[questionNumber - 1].options[gkquestions[questionNumber - 1].answer]) {
+          document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+        }
+        else {
+          document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+        }
+      }
+      else if (quizType == 'physics') {
+        if (optionValue == physicsquestions[questionNumber - 1].options[physicsquestions[questionNumber - 1].answer]) {
+          document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+        }
+        else {
+          document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+        }
+      }
+      else if (quizType == 'chemistry') {
+        if (optionValue == chemistryquestions[questionNumber - 1].options[chemistryquestions[questionNumber - 1].answer]) {
+          document.getElementById("option" + optionnumber + "out").clabiologyssList.add("rightanswer")
+        }
+        else {
+          document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+        }
+      }
+      else if (quizType == 'biology') {
+        if (optionValue == biologyquestions[questionNumber - 1].options[biologyquestions[questionNumber - 1].answer]) {
+          document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+        }
+        else {
+          document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+        }
+      }
+    }
+
+    const clickoption = (optionnumber) => {
+      const optionValue = document.getElementById('option' + optionnumber).innerHTML;
+
+      console.log(optionValue)
+
+      if (localStorage.getItem(`answer${questionNumber}`) == null) {
+        if (quizType == 'india') {
+          if (optionValue == indiaquestions[questionNumber - 1].options[indiaquestions[questionNumber - 1].answer]) {
+            document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+            score++;
+            localStorage.setItem('score', score);
+            setscore();
+          }
+          else {
+            document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+          }
+        }
+
+        else if (quizType == 'science') {
+          if (optionValue == sciencequestions[questionNumber - 1].options[sciencequestions[questionNumber - 1].answer]) {
+            document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+            score++;
+            localStorage.setItem('score', score);
+            setscore();
+          }
+          else {
+            document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+          }
+        }
+
+        else if (quizType == 'history') {
+          if (optionValue == historyquestions[questionNumber - 1].options[historyquestions[questionNumber - 1].answer]) {
+            document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+            score++;
+            localStorage.setItem('score', score);
+            setscore();
+          }
+          else {
+            document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+          }
+        }
+
+        else if (quizType == 'geography') {
+          if (optionValue == geographyquestions[questionNumber - 1].options[geographyquestions[questionNumber - 1].answer]) {
+            document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+            score++;
+            localStorage.setItem('score', score);
+            setscore();
+          }
+          else {
+            document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+          }
+        }
+
+        else if (quizType == 'gk') {
+          if (optionValue == gkquestions[questionNumber - 1].options[gkquestions[questionNumber - 1].answer]) {
+            document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+            score++;
+            localStorage.setItem('score', score);
+            setscore();
+          }
+          else {
+            document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+          }
+        }
+
+        else if (quizType == 'physics') {
+          if (optionValue == physicsquestions[questionNumber - 1].options[physicsquestions[questionNumber - 1].answer]) {
+            document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+            score++;
+            localStorage.setItem('score', score);
+            setscore();
+          }
+          else {
+            document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+          }
+        }
+
+        else if (quizType == 'chemistry') {
+          if (optionValue == chemistryquestions[questionNumber - 1].options[chemistryquestions[questionNumber - 1].answer]) {
+            document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+            score++;
+            localStorage.setItem('score', score);
+            setscore();
+          }
+          else {
+            document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+          }
+        }
+
+        else if (quizType == 'biology') {
+          if (optionValue == biologyquestions[questionNumber - 1].options[biologyquestions[questionNumber - 1].answer]) {
+            document.getElementById("option" + optionnumber + "out").classList.add("rightanswer")
+            score++;
+            localStorage.setItem('score', score);
+            setscore();
+          }
+          else {
+            document.getElementById("option" + optionnumber + "out").classList.add("wronganswer")
+          }
+        }
+
+        localStorage.setItem(`answer${questionNumber}`, optionnumber);
+      }
+
+      else {
+        alert("You have already answered this question")
+      }
+    }
+
+    const setquestion = () => {
+      if (quizType == "india") {
+        status();
+
+        // document.getElementById("question")
+        questionElement.innerHTML = indiaquestions[questionNumber - 1].question;
+        option1Element.innerHTML = indiaquestions[questionNumber - 1].options[0];
+        option2Element.innerHTML = indiaquestions[questionNumber - 1].options[1];
+        option3Element.innerHTML = indiaquestions[questionNumber - 1].options[2];
+        option4Element.innerHTML = indiaquestions[questionNumber - 1].options[3];
+
+        if (localStorage.getItem(`answer${questionNumber}`) != null) {
+          selectedoption(localStorage.getItem(`answer${questionNumber}`))
+        }
+
+      }
+
+      else if (quizType == 'science') {
+        status();
+
+        questionElement.innerHTML = sciencequestions[questionNumber - 1].question;
+        option1Element.innerHTML = sciencequestions[questionNumber - 1].options[0];
+        option2Element.innerHTML = sciencequestions[questionNumber - 1].options[1];
+        option3Element.innerHTML = sciencequestions[questionNumber - 1].options[2];
+        option4Element.innerHTML = sciencequestions[questionNumber - 1].options[3];
+
+        if (localStorage.getItem(`answer${questionNumber}`) != null) {
+          selectedoption(localStorage.getItem(`answer${questionNumber}`))
+        }
+
+      }
+
+      else if (quizType == 'history') {
+        status();
+
+        questionElement.innerHTML = historyquestions[questionNumber - 1].question;
+        option1Element.innerHTML = historyquestions[questionNumber - 1].options[0];
+        option2Element.innerHTML = historyquestions[questionNumber - 1].options[1];
+        option3Element.innerHTML = historyquestions[questionNumber - 1].options[2];
+        option4Element.innerHTML = historyquestions[questionNumber - 1].options[3];
+
+        if (localStorage.getItem(`answer${questionNumber}`) != null) {
+          selectedoption(localStorage.getItem(`answer${questionNumber}`))
+        }
+
+      }
+
+      else if (quizType == 'geography') {
+        status();
+
+        questionElement.innerHTML = geographyquestions[questionNumber - 1].question;
+        option1Element.innerHTML = geographyquestions[questionNumber - 1].options[0];
+        option2Element.innerHTML = geographyquestions[questionNumber - 1].options[1];
+        option3Element.innerHTML = geographyquestions[questionNumber - 1].options[2];
+        option4Element.innerHTML = geographyquestions[questionNumber - 1].options[3];
+
+        if (localStorage.getItem(`answer${questionNumber}`) != null) {
+          selectedoption(localStorage.getItem(`answer${questionNumber}`))
+        }
+
+      }
+
+      else if (quizType == 'gk') {
+        status();
+
+        questionElement.innerHTML = gkquestions[questionNumber - 1].question;
+        option1Element.innerHTML = gkquestions[questionNumber - 1].options[0];
+        option2Element.innerHTML = gkquestions[questionNumber - 1].options[1];
+        option3Element.innerHTML = gkquestions[questionNumber - 1].options[2];
+        option4Element.innerHTML = gkquestions[questionNumber - 1].options[3];
+
+        if (localStorage.getItem(`answer${questionNumber}`) != null) {
+          selectedoption(localStorage.getItem(`answer${questionNumber}`))
+        }
+
+      }
+
+      else if (quizType == 'physics') {
+        status();
+
+        questionElement.innerHTML = physicsquestions[questionNumber - 1].question;
+        option1Element.innerHTML = physicsquestions[questionNumber - 1].options[0];
+        option2Element.innerHTML = physicsquestions[questionNumber - 1].options[1];
+        option3Element.innerHTML = physicsquestions[questionNumber - 1].options[2];
+        option4Element.innerHTML = physicsquestions[questionNumber - 1].options[3];
+
+        if (localStorage.getItem(`answer${questionNumber}`) != null) {
+          selectedoption(localStorage.getItem(`answer${questionNumber}`))
+        }
+
+      }
+
+      else if (quizType == 'chemistry') {
+        status();
+
+        questionElement.innerHTML = chemistryquestions[questionNumber - 1].question;
+        option1Element.innerHTML = chemistryquestions[questionNumber - 1].options[0];
+        option2Element.innerHTML = chemistryquestions[questionNumber - 1].options[1];
+        option3Element.innerHTML = chemistryquestions[questionNumber - 1].options[2];
+        option4Element.innerHTML = chemistryquestions[questionNumber - 1].options[3];
+
+        if (localStorage.getItem(`answer${questionNumber}`) != null) {
+          selectedoption(localStorage.getItem(`answer${questionNumber}`))
+        }
+
+      }
+
+      else if (quizType == 'biology') {
+        status();
+
+        questionElement.innerHTML = biologyquestions[questionNumber - 1].question;
+        option1Element.innerHTML = biologyquestions[questionNumber - 1].options[0];
+        option2Element.innerHTML = biologyquestions[questionNumber - 1].options[1];
+        option3Element.innerHTML = biologyquestions[questionNumber - 1].options[2];
+        option4Element.innerHTML = biologyquestions[questionNumber - 1].options[3];
+
+        if (localStorage.getItem(`answer${questionNumber}`) != null) {
+          selectedoption(localStorage.getItem(`answer${questionNumber}`))
+        }
+
+      }
+
+      else {
+        console.log('No quiz type selected')
+        quitquiz();
+      }
+    }
+
+    const setscore = () => {
+      let length = 0;
+      if (quizType == "india") {
+        length = indiaquestions.length;
+      }
+      else if (quizType == 'science') {
+        length = sciencequestions.length;
+      }
+      else if (quizType == 'history') {
+        length = historyquestions.length;
+      }
+      else if (quizType == 'geography') {
+        length = geographyquestions.length;
+      }
+      else if (quizType == 'gk') {
+        length = gkquestions.length;
+      }
+      else if (quizType == 'physics') {
+        length = physicsquestions.length;
+      }
+      else if (quizType == 'chemistry') {
+        length = chemistryquestions.length;
+      }
+      else if (quizType == 'biology') {
+        length = biologyquestions.length;
+      }
+
+      document.getElementById('score').innerHTML = `${score}/${length}`
+    }
+
+
+
+    setquestion();
+    setscore();
+
+  </script>
+
+</body>
+
+</html>
